@@ -1,0 +1,715 @@
+@import "tailwindcss";
+
+/* =========================================================
+   EXISTING DESIGN SYSTEM
+   Typography normalized to Inter only.
+   ========================================================= */
+
+@theme {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --font-inter:
+    var(--font-inter),
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+@layer base {
+  :root {
+    /* =======================================================
+       EXISTING OBSIDIAN PALETTE
+       ======================================================= */
+
+    --background: 240 20% 3%;
+    --foreground: 260 18% 96%;
+
+    --card: 240 14% 6%;
+    --card-foreground: 260 18% 96%;
+
+    --popover: 240 14% 6%;
+    --popover-foreground: 260 18% 96%;
+
+    --primary: 260 18% 96%;
+    --primary-foreground: 240 20% 3%;
+
+    --secondary: 240 14% 8%;
+    --secondary-foreground: 260 18% 96%;
+
+    --muted: 240 13% 8%;
+    --muted-foreground: 240 6% 64%;
+
+    --accent: 263 70% 58%;
+    --accent-foreground: 260 18% 96%;
+
+    --border: 240 8% 14%;
+    --input: 240 8% 14%;
+    --ring: 263 70% 58%;
+
+    --radius: 0.65rem;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 88px;
+    background: #07070a;
+    color-scheme: dark;
+  }
+
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    min-height: 100vh;
+    overflow-x: hidden;
+
+    background:
+      radial-gradient(
+        circle at 50% -18%,
+        rgba(139, 92, 246, 0.075),
+        transparent 30%
+      ),
+      radial-gradient(
+        circle at 5% 28%,
+        rgba(109, 40, 217, 0.025),
+        transparent 22%
+      ),
+      linear-gradient(
+        180deg,
+        #07070a 0%,
+        #0a0a0f 50%,
+        #07070a 100%
+      );
+
+    color: #f4f3f7;
+
+    /* ONLY TYPOGRAPHY CHANGE */
+    font-family:
+      var(--font-inter),
+      ui-sans-serif,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
+
+    font-size: 16px;
+    line-height: 1.7;
+
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
+
+    text-rendering: optimizeLegibility;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* =======================================================
+     HEADINGS — INTER
+     ======================================================= */
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family:
+      var(--font-inter),
+      ui-sans-serif,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
+
+    color: #f4f3f7;
+
+    text-rendering: optimizeLegibility;
+
+    letter-spacing: -0.025em;
+  }
+
+  h1 {
+    font-size: clamp(3.5rem, 8vw, 7.5rem);
+    line-height: 0.94;
+    font-weight: 700;
+  }
+
+  h2 {
+    font-size: clamp(2.75rem, 6vw, 5.5rem);
+    line-height: 0.98;
+    font-weight: 700;
+  }
+
+  h3 {
+    font-size: clamp(1.75rem, 3vw, 2.75rem);
+    line-height: 1.05;
+    font-weight: 600;
+  }
+
+  h4 {
+    font-weight: 600;
+  }
+
+  h5,
+  h6 {
+    font-weight: 600;
+  }
+
+  /* =======================================================
+     BODY / UI
+     ======================================================= */
+
+  p {
+    color: #a6a5ae;
+
+    font-family:
+      var(--font-inter),
+      ui-sans-serif,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
+
+    font-size: 16px;
+    line-height: 1.8;
+    font-weight: 400;
+  }
+
+  a,
+  button,
+  input,
+  textarea,
+  select,
+  label,
+  span {
+    font-family:
+      var(--font-inter),
+      ui-sans-serif,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
+  }
+
+  button,
+  a {
+    font-weight: 500;
+  }
+
+  label {
+    color: #a6a5ae;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  input,
+  textarea,
+  select {
+    color: #f4f3f7;
+    font-size: 15px;
+    font-weight: 400;
+  }
+
+  ::placeholder {
+    color: #6f6e78;
+    opacity: 1;
+  }
+
+  button,
+  a,
+  input,
+  textarea,
+  select {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :focus-visible {
+    outline: 2px solid rgba(139, 92, 246, 0.72);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background: rgba(139, 92, 246, 0.32);
+    color: #ffffff;
+  }
+}
+
+/* =========================================================
+   TYPE HELPERS
+   ========================================================= */
+
+@layer utilities {
+  .font-heading {
+    font-family:
+      var(--font-inter),
+      ui-sans-serif,
+      system-ui,
+      sans-serif;
+  }
+
+  .font-body {
+    font-family:
+      var(--font-inter),
+      ui-sans-serif,
+      system-ui,
+      sans-serif;
+  }
+
+  .font-mono {
+    /*
+      Kept as a compatibility utility so existing components
+      don't break. It still resolves to Inter.
+    */
+    font-family:
+      var(--font-inter),
+      ui-sans-serif,
+      system-ui,
+      sans-serif;
+  }
+
+  .section-label {
+    font-family:
+      var(--font-inter),
+      ui-sans-serif,
+      system-ui,
+      sans-serif;
+
+    color: #a78bfa;
+
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    line-height: 1.5;
+    text-transform: uppercase;
+  }
+
+  .editorial-number {
+    font-family:
+      var(--font-inter),
+      ui-sans-serif,
+      system-ui,
+      sans-serif;
+
+    color: #6f6e78;
+
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+  }
+
+  .tech-tag {
+    display: inline-flex;
+    align-items: center;
+
+    min-height: 30px;
+
+    padding: 0.42rem 0.68rem;
+
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 0.45rem;
+
+    background: rgba(13, 13, 18, 0.72);
+
+    color: #a6a5ae;
+
+    font-family:
+      var(--font-inter),
+      ui-sans-serif,
+      system-ui,
+      sans-serif;
+
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.025em;
+
+    transition:
+      border-color 300ms ease,
+      color 300ms ease,
+      background-color 300ms ease;
+  }
+
+  .tech-tag:hover {
+    border-color: rgba(139, 92, 246, 0.35);
+    color: #c4b5fd;
+    background: rgba(139, 92, 246, 0.055);
+  }
+
+  /* =======================================================
+     EXISTING COLOR UTILITIES
+     ======================================================= */
+
+  .text-violet {
+    color: #a78bfa;
+  }
+
+  .text-gradient {
+    background-image:
+      linear-gradient(
+        110deg,
+        #f4f3f7 0%,
+        #f4f3f7 45%,
+        #a78bfa 100%
+      );
+
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .violet-glow {
+    box-shadow:
+      0 0 50px rgba(139, 92, 246, 0.08),
+      0 20px 70px rgba(0, 0, 0, 0.35);
+  }
+
+  .hero-glow {
+    background:
+      radial-gradient(
+        circle,
+        rgba(139, 92, 246, 0.12) 0%,
+        rgba(139, 92, 246, 0.04) 28%,
+        transparent 68%
+      );
+
+    filter: blur(45px);
+  }
+
+  /* =======================================================
+     EXISTING SURFACES
+     ======================================================= */
+
+  .premium-surface {
+    background:
+      linear-gradient(
+        145deg,
+        rgba(20, 20, 27, 0.96),
+        rgba(13, 13, 18, 0.94)
+      );
+
+    border: 1px solid rgba(255, 255, 255, 0.07);
+
+    box-shadow:
+      0 24px 70px rgba(0, 0, 0, 0.28),
+      inset 0 1px 0 rgba(255, 255, 255, 0.025);
+  }
+
+  .glass-card {
+    background: rgba(13, 13, 18, 0.72);
+
+    border: 1px solid rgba(255, 255, 255, 0.07);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .premium-hover {
+    position: relative;
+    overflow: hidden;
+
+    transition:
+      transform 600ms cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 400ms ease,
+      box-shadow 500ms ease,
+      background-color 400ms ease;
+  }
+
+  .premium-hover::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+      radial-gradient(
+        circle at 90% 0%,
+        rgba(139, 92, 246, 0.075),
+        transparent 34%
+      );
+
+    opacity: 0;
+
+    transition: opacity 500ms ease;
+
+    pointer-events: none;
+  }
+
+  .premium-hover:hover {
+    transform: translateY(-5px);
+
+    border-color: rgba(255, 255, 255, 0.11);
+
+    box-shadow:
+      0 28px 70px rgba(0, 0, 0, 0.35),
+      0 0 45px rgba(139, 92, 246, 0.035);
+  }
+
+  .premium-hover:hover::before {
+    opacity: 1;
+  }
+
+  /* =======================================================
+     EXISTING BUTTONS
+     ======================================================= */
+
+  .premium-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+
+    min-height: 44px;
+
+    padding: 0.72rem 1rem;
+
+    border: 1px solid rgba(244, 243, 247, 0.92);
+    border-radius: 0.5rem;
+
+    background: #f4f3f7;
+    color: #07070a;
+
+    font-size: 0.82rem;
+    font-weight: 500;
+
+    transition:
+      transform 300ms ease,
+      background-color 300ms ease,
+      color 300ms ease,
+      border-color 300ms ease,
+      box-shadow 300ms ease;
+  }
+
+  .premium-button:hover {
+    transform: translateY(-2px);
+
+    background: #a78bfa;
+    border-color: #a78bfa;
+    color: #08070c;
+
+    box-shadow:
+      0 12px 35px rgba(139, 92, 246, 0.18);
+  }
+
+  .premium-button-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+
+    min-height: 44px;
+
+    padding: 0.72rem 1rem;
+
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    border-radius: 0.5rem;
+
+    background: rgba(13, 13, 18, 0.4);
+    color: #f4f3f7;
+
+    font-size: 0.82rem;
+    font-weight: 500;
+
+    transition:
+      transform 300ms ease,
+      background-color 300ms ease,
+      border-color 300ms ease,
+      color 300ms ease;
+  }
+
+  .premium-button-outline:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(139, 92, 246, 0.35);
+
+    background: rgba(139, 92, 246, 0.06);
+
+    color: #c4b5fd;
+  }
+
+  /* =======================================================
+     PROJECT IMAGE
+     ======================================================= */
+
+  .project-image {
+    position: relative;
+    overflow: hidden;
+
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 0.7rem;
+
+    background: #0d0d12;
+
+    box-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.28);
+
+    transition:
+      transform 700ms cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 400ms ease,
+      box-shadow 500ms ease;
+  }
+
+  .project-image:hover {
+    transform: scale(1.012);
+
+    border-color: rgba(139, 92, 246, 0.24);
+
+    box-shadow:
+      0 28px 80px rgba(0, 0, 0, 0.35),
+      0 0 35px rgba(139, 92, 246, 0.045);
+  }
+
+  /* =======================================================
+     EDITORIAL DIVIDER
+     ======================================================= */
+
+  .editorial-divider {
+    width: 100%;
+    height: 1px;
+
+    background:
+      linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.02),
+        rgba(255, 255, 255, 0.09),
+        rgba(255, 255, 255, 0.02)
+      );
+  }
+
+  /* =======================================================
+     TECH GRID
+     ======================================================= */
+
+  .tech-grid {
+    background-image:
+      linear-gradient(
+        rgba(255, 255, 255, 0.025) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.025) 1px,
+        transparent 1px
+      );
+
+    background-size: 64px 64px;
+  }
+}
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(111, 110, 120, 0.55) transparent;
+}
+
+html::-webkit-scrollbar {
+  width: 8px;
+}
+
+html::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb {
+  background: rgba(111, 110, 120, 0.55);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.65);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+/* =========================================================
+   ACCESSIBILITY / REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 640px) {
+  body {
+    font-size: 15.5px;
+    line-height: 1.72;
+  }
+
+  p {
+    font-size: 15.5px;
+    line-height: 1.78;
+  }
+
+  h1 {
+    font-size: clamp(3rem, 15vw, 4.5rem);
+    line-height: 0.96;
+  }
+
+  h2 {
+    font-size: clamp(2.5rem, 12vw, 3.8rem);
+    line-height: 1;
+  }
+
+  h3 {
+    font-size: clamp(1.55rem, 7vw, 2rem);
+  }
+
+  .section-label {
+    font-size: 0.68rem;
+  }
+
+  .tech-tag {
+    font-size: 0.65rem;
+  }
+}
