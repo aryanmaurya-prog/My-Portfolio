@@ -50,7 +50,7 @@ const projects: Project[] = [
     category: "Business Intelligence",
     domains: ["Data Analytics", "Power BI"],
     featured: true,
-    previewImage: "/images/executive-overview-analytics.png",
+    previewImage: "/images/Executive-Overview-Analytics.png",
     problem:
       "Analyze operational and business data to understand customer behavior, restaurant performance, sales patterns, and overall business performance.",
     approach:
@@ -71,7 +71,7 @@ const projects: Project[] = [
     category: "Python Application",
     domains: ["Python"],
     featured: true,
-    previewImage: "/images/face-recognition.png",
+    previewImage: "/images/Face-Recognition.png",
     problem:
       "Manual attendance recording can be time-consuming and requires repetitive data entry. This project focuses on creating a more automated attendance workflow using face recognition.",
     approach:
