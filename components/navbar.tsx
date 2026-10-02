@@ -16,17 +16,19 @@ const navLinks = [
   { name: "Contact", href: "#contact" },
 ];
 
+const NAVBAR_HEIGHT = 64;
+
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("about");
-  const [isAutoScrolling, setIsAutoScrolling] = useState(false);
 
+  /*
+   * Scroll state + active section
+   */
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
-
-      if (isAutoScrolling) return;
 
       const sectionIds = navLinks.map((link) =>
         link.href.substring(1)
@@ -41,10 +43,17 @@ export function Navbar() {
         if (!section) return;
 
         const rect = section.getBoundingClientRect();
-        const distance = Math.abs(rect.top - 100);
+
+        /*
+         * Consider the area just below the navbar
+         * when determining the active section.
+         */
+        const distance = Math.abs(
+          rect.top - NAVBAR_HEIGHT - 20
+        );
 
         if (
-          rect.top <= 100 &&
+          rect.top <= NAVBAR_HEIGHT + 40 &&
           distance < closestDistance
         ) {
           closestDistance = distance;
@@ -52,6 +61,9 @@ export function Navbar() {
         }
       });
 
+      /*
+       * At the very top, About is active.
+       */
       if (window.scrollY < 100) {
         currentSection = "about";
       }
@@ -68,49 +80,118 @@ export function Navbar() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [isAutoScrolling]);
+  }, []);
 
+  /*
+   * Lock body scrolling while mobile menu is open.
+   * This prevents mobile browsers from behaving strangely
+   * while the menu is open.
+   */
+  useEffect(() => {
+    if (!isMobileMenuOpen) {
+      document.body.style.overflow = "";
+      return;
+    }
+
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobileMenuOpen]);
+
+  /*
+   * Close mobile menu when pressing Escape.
+   */
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  /*
+   * Close mobile menu automatically when switching
+   * to desktop viewport.
+   */
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  /*
+   * Navigation handler
+   *
+   * Important:
+   * - No setTimeout
+   * - No isAutoScrolling state
+   * - Uses native scrollTo
+   * - Calculates the 64px navbar offset
+   * - Works for both desktop and mobile
+   */
   const handleNavClick = (
     event: React.MouseEvent<HTMLAnchorElement>,
     href: string
   ) => {
     event.preventDefault();
 
+
+
     const targetId = href.substring(1);
     const target = document.getElementById(targetId);
 
     if (!target) return;
 
+    /* Update active navigation immediately. */
     setActiveSection(targetId);
-    setIsAutoScrolling(true);
+
+    /* Close mobile menu first. */
     setIsMobileMenuOpen(false);
 
-    const navbarOffset = 64;
+    /* Calculate target position after the click.
+       requestAnimationFrame allows React to process
+       the mobile menu state update before calculating
+       the final scroll position. */
+    requestAnimationFrame(() => {
+      const targetPosition =
+        target.getBoundingClientRect().top +
+        window.scrollY -
+        NAVBAR_HEIGHT;
 
-    const targetPosition =
-      target.getBoundingClientRect().top +
-      window.scrollY -
-      navbarOffset;
-
-    window.scrollTo({
-      top: targetPosition,
-      behavior: "smooth",
+      window.scrollTo({
+        top: Math.max(0, targetPosition),
+        behavior: "smooth",
+      });
     });
 
-    const startPosition = window.scrollY;
-    const distance = Math.abs(
-      targetPosition - startPosition
-    );
+    /* Update the URL hash without causing the browser
+       to perform its own jump. */
+    window.history.replaceState(null, "", href);
+  };
 
-    const scrollDuration = Math.min(
-      1200,
-      Math.max(500, distance * 0.6)
-    );
-
-    window.setTimeout(() => {
-      setActiveSection(targetId);
-      setIsAutoScrolling(false);
-    }, scrollDuration);
+  /*
+   * Logo click
+   */
+  const handleLogoClick = (
+    event: React.MouseEvent<HTMLAnchorElement>
+  ) => {
+    handleNavClick(event, "#about");
   };
 
   return (
@@ -127,19 +208,20 @@ export function Navbar() {
         duration: 0.55,
         ease: [0.22, 1, 0.36, 1],
       }}
-      className={`fixed top-0 z-50 w-full border-b transition-all duration-500 ${
+      className={`fixed inset-x-0 top-0 z-[100] w-full border-b transition-all duration-500 ${
         scrolled
           ? "border-white/[0.08] bg-slate-950/80 shadow-[0_8px_30px_rgba(2,8,23,0.18)] backdrop-blur-xl"
           : "border-transparent bg-transparent"
       }`}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
-        {/* Logo */}
+        {/* ================================================== */}
+        {/* LOGO */}
+        {/* ================================================== */}
+
         <a
           href="#about"
-          onClick={(event) =>
-            handleNavClick(event, "#about")
-          }
+          onClick={handleLogoClick}
           className="group flex items-center gap-2.5 rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
           aria-label="Aryan Maurya Home"
         >
@@ -164,12 +246,14 @@ export function Navbar() {
           </span>
         </a>
 
-        {/* Desktop Navigation */}
+        {/* ================================================== */}
+        {/* DESKTOP NAVIGATION */}
+        {/* ================================================== */}
+
         <nav className="hidden items-center gap-2 md:flex">
           {navLinks.map((link) => {
             const sectionId = link.href.substring(1);
-            const isActive =
-              activeSection === sectionId;
+            const isActive = activeSection === sectionId;
 
             return (
               <a
@@ -212,7 +296,10 @@ export function Navbar() {
           })}
         </nav>
 
-        {/* Desktop Actions */}
+        {/* ================================================== */}
+        {/* DESKTOP ACTIONS */}
+        {/* ================================================== */}
+
         <div className="hidden items-center gap-2.5 md:flex">
           {/* Resume */}
           <a
@@ -240,18 +327,26 @@ export function Navbar() {
           </a>
         </div>
 
-        {/* Mobile Button */}
+        {/* ================================================== */}
+        {/* MOBILE HAMBURGER */}
+        {/* ================================================== */}
+
         <motion.button
           type="button"
           whileTap={{
             scale: 0.94,
           }}
-          className="rounded-lg border border-transparent p-2 text-slate-400 transition-all duration-300 hover:border-slate-800 hover:bg-slate-900/60 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 md:hidden"
+          className="relative z-[110] rounded-lg border border-transparent p-2 text-slate-400 transition-all duration-300 hover:border-slate-800 hover:bg-slate-900/60 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 md:hidden"
           onClick={() =>
             setIsMobileMenuOpen((prev) => !prev)
           }
-          aria-label="Toggle navigation menu"
+          aria-label={
+            isMobileMenuOpen
+              ? "Close navigation menu"
+              : "Open navigation menu"
+          }
           aria-expanded={isMobileMenuOpen}
+          aria-controls="mobile-navigation"
         >
           {isMobileMenuOpen ? (
             <X className="h-5 w-5" />
@@ -261,10 +356,14 @@ export function Navbar() {
         </motion.button>
       </div>
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
+      {/* ================================================== */}
+      {/* MOBILE MENU */}
+      {/* ================================================== */}
+
+      <AnimatePresence initial={false}>
         {isMobileMenuOpen && (
           <motion.div
+            id="mobile-navigation"
             initial={{
               opacity: 0,
               height: 0,
@@ -278,16 +377,15 @@ export function Navbar() {
               height: 0,
             }}
             transition={{
-              duration: 0.28,
+              duration: 0.25,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="overflow-hidden border-t border-white/[0.06] bg-slate-950/95 backdrop-blur-xl md:hidden"
+            className="relative z-[100] overflow-hidden border-t border-white/[0.06] bg-slate-950/95 backdrop-blur-xl md:hidden"
           >
             <nav className="flex flex-col gap-1.5 p-4">
+              {/* Navigation Links */}
               {navLinks.map((link, index) => {
-                const sectionId =
-                  link.href.substring(1);
-
+                const sectionId = link.href.substring(1);
                 const isActive =
                   activeSection === sectionId;
 
@@ -321,17 +419,26 @@ export function Navbar() {
                 );
               })}
 
-              {/* Mobile Actions */}
+              {/* ================================================== */}
+              {/* MOBILE ACTIONS */}
+              {/* ================================================== */}
+
               <div className="mt-2 flex flex-col gap-2.5 border-t border-white/[0.07] pt-4">
+                {/* Resume */}
                 <a
                   href="/Resume.pdf"
                   download="Resume.pdf"
+                  onClick={() =>
+                    setIsMobileMenuOpen(false)
+                  }
                   className="group inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-slate-700 bg-transparent text-sm font-medium text-slate-100 transition-all duration-300 hover:border-slate-600 hover:bg-slate-900"
                 >
                   <Download className="h-4 w-4 transition-transform duration-300 group-hover:translate-y-0.5" />
+
                   Resume
                 </a>
 
+                {/* Contact */}
                 <a
                   href="#contact"
                   onClick={(event) =>
